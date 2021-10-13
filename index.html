@@ -37,6 +37,10 @@
     <h2>How much will!</h2>
     <p><span class="counter"> </span> + <span class="step"></span></p>
     <p><strong>Result: <span class="sum"></span></strong></p>
+    <p><span class="counter"> </span> - <span class="step"></span></p>
+    <p><strong>Result: <span class="subtract"></span></strong></p>
+    <p><span class="counter"> </span> * <span class="step"></span></p>
+    <p><strong>Result: <span class="multiply"></span></strong></p>
     <div class="math">
         Counter:
         <button class="button minus">-1</button>
@@ -79,48 +83,83 @@
     })
 </script>
 <script>
-    const counterEl = document.querySelector('.js-app .counter');
-    const buttonElMinus = document.querySelector('.js-app .minus');
-    const buttonElPlus = document.querySelector('.js-app .plus');
+    const counterEl = document.querySelectorAll('.js-app .counter');
+    const stepEl = document.querySelectorAll('.js-app .step');
+
+    const buttonCounterElMinus = document.querySelectorAll('.js-app .math .minus');
+    const buttonCounterElPlus = document.querySelectorAll('.js-app .math .plus');
     const sumEl = document.querySelector('.js-app .sum');
-    const stepEl = document.querySelector('.js-app .step');
+    const subtractEl = document.querySelector('.js-app .subtract');
+    const multiplyEl = document.querySelector('.js-app .multiply');
 
     const data = {
         counter: 1,
         step: 2
     };
 
-    const incrementCounterHandler = function () {
-    };
-    const decrementCounterHandler = function () {
-    };
-    //...
-    const getSum = function () {
+    // methods
+    const incrementHandler = function (property, htmlElement, increment) {
+        data[property] += increment;
+        htmlElement.forEach(el => el.textContent = data[property]);
     };
 
-    const queue = [getSum];
+    const decrementHandler = (property, htmlElement, increment) => {
+        data[property] -= increment;
+        htmlElement.forEach(el => el.textContent = data[property]);
+    };
 
+    // computed properties
+    const getSum = () => {
+        sumEl.textContent = String(data.counter + data.step);
+    };
+
+    const getSubtract = () => {
+        subtractEl.textContent = String(data.counter - data.step);
+    };
+
+    const getMultiply = () => {
+        multiplyEl.textContent = String(data.counter * data.step);
+    };
+
+    // computed queue
+    const queue = [getSum, getSubtract, getMultiply];
+
+    // reactivity
     Object.keys(data).forEach(key => {
         let value = data[key]; // data.counter, data.counter1, data.counter2
         Object.defineProperty(data, key, {
             get: function () {
-                console.log('get1');
-                // queue.push();
                 return value;
             },
             set: function (newValue) {
-                console.log('set1');
                 value = newValue;
                 queue.forEach(fn => fn());
             }
         });
     });
 
-    counterEl.textContent = data.counter;
-    stepEl.textContent = data.step;
+    // event listeners
+    buttonCounterElMinus[0].addEventListener('click', () => {
+        decrementHandler("counter", counterEl, 1)
+    });
+    buttonCounterElPlus[0].addEventListener('click', () => {
+        incrementHandler("counter", counterEl, 1)
+    });
+
+    buttonCounterElMinus[1].addEventListener('click', () => {
+        decrementHandler("step", stepEl, 2)
+    });
+    buttonCounterElPlus[1].addEventListener('click', () => {
+        incrementHandler("step", stepEl, 2)
+    });
+
+    // initial state page
+    counterEl.forEach(el => el.textContent = data.counter);
+    stepEl.forEach(el => el.textContent = data.step);
     getSum();
-    buttonElMinus.addEventListener('click', decrementCounterHandler);
-    buttonElPlus.addEventListener('click', incrementCounterHandler);
+    getSubtract();
+    getMultiply();
+
 </script>
 </body>
 
