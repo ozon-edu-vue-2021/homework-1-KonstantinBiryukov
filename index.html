@@ -84,12 +84,12 @@
             let value = data[key]; // data.counter, data.counter1, data.counter2
             Object.defineProperty(data, key, {
                 get: function () {
-                    console.log('get');
+                    console.log('get1');
                     // queue.push();
                     return value;
                 },
                 set: function (newValue) {
-                    console.log('set');
+                    console.log('set1');
                     value = newValue;
                     queue.forEach(fn => fn());
                 }
