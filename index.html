@@ -16,22 +16,26 @@
     <h2>How much will?</h2>
     <p>{{counter}} + {{step}}</p>
     <p><strong>Result: {{sum}}</strong></p>
+    <p>{{counter}} - {{step}}</p>
+    <p><strong>Result: {{subtract}}</strong></p>
+    <p>{{counter}} * {{step}}</p>
+    <p><strong>Result: {{multiply}}</strong></p>
     <div class="math">
         Counter:
-        <button class="button minus" v-on:click="decrementCounterHandler">-1</button>
-        <button class="button plus" v-on:click="incrementCounterHandler">+1</button>
+        <button class="button minus" v-on:click="decrementHandler('counter', 1)">-1</button>
+        <button class="button plus" v-on:click="incrementHandler('counter', 1)">+1</button>
     </div>
     <div class="math">
         Step:
-        <button class="button minus">-2</button>
-        <button class="button plus">+2</button>
+        <button class="button minus" v-on:click="decrementHandler('step', 2)">-2</button>
+        <button class="button plus" v-on:click="incrementHandler('step', 2)">+2</button>
     </div>
 </section>
 <hr>
 <section class="app js-app">
     <h1>JS</h1>
     <h2>How much will!</h2>
-    <p><span class="counter"></span> + <span class="step"></span></p>
+    <p><span class="counter"> </span> + <span class="step"></span></p>
     <p><strong>Result: <span class="sum"></span></strong></p>
     <div class="math">
         Counter:
@@ -54,14 +58,22 @@
             }
         },
         methods: {
-            incrementCounterHandler() {
+            incrementHandler(counter, increment) {
+                this[counter] += increment
             },
-            decrementCounterHandler() {
-            }
+            decrementHandler(counter, increment) {
+                this[counter] -= increment
+            },
         },
         computed: {
             sum() {
                 return this.counter + this.step
+            },
+            subtract() {
+                return this.counter - this.step
+            },
+            multiply() {
+                return this.counter * this.step
             }
         }
     })
